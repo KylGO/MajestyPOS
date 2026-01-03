@@ -14,6 +14,7 @@ public class ModifPanel extends JFrame{
 	private JTable table;
 	private JPanel PanelDonne;
 	private JPanel PanelAjout;
+	private JPanel PanelDelete;
 	private String tableChoisi = "";
 	public ModifPanel() {
 		setTitle("Majesty.sql");
@@ -67,7 +68,10 @@ public class ModifPanel extends JFrame{
 		
 		PanelAjout = new JPanel();
 		options.add(PanelAjout,BorderLayout.SOUTH);
-		
+		PanelDelete = new JPanel();
+
+		options.add(PanelDelete,BorderLayout.SOUTH);
+
 		options.add(table,BorderLayout.CENTER);
 		return options;
 	}
@@ -120,17 +124,17 @@ public class ModifPanel extends JFrame{
 		switch(tableChoisi) {
 		case "carte":
 			PanelAjout.removeAll();
-			JTextField nom = new JTextField();
-			JTextField description = new JTextField();
-			JButton submit = new JButton("Ajouter");
+			JTextField nomCart = new JTextField();
+			JTextField descriptionCart = new JTextField();
+			JButton submitCart = new JButton("Ajouter");
 
-			PanelAjout.add(nom);
-			PanelAjout.add(description);
-			PanelAjout.add(submit);
+			PanelAjout.add(nomCart);
+			PanelAjout.add(descriptionCart);
+			PanelAjout.add(submitCart);
 
 			
-			submit.addActionListener(e -> {
-				String requete = "INSERT INTO carte(nom,description) VALUES('"+nom.getText()+"','"+description.getText()+"')";
+			submitCart.addActionListener(e -> {
+				String requete = "INSERT INTO carte(nom,description) VALUES('"+nomCart.getText()+"','"+descriptionCart.getText()+"')";
 				carteDAO.addTableCarte(requete);
 				System.out.println("Ajout BON");
 
@@ -141,18 +145,21 @@ public class ModifPanel extends JFrame{
 
 		case "categorie":
 			PanelAjout.removeAll();
-			JTextField nom = new JTextField();
-			JTextField description = new JTextField();
-			JButton submit = new JButton("Ajouter");
+			JTextField nomCate = new JTextField();
+			JTextField descriptionCate = new JTextField();
+			JTextField idCarteCate = new JTextField();
 
-			PanelAjout.add(nom);
-			PanelAjout.add(description);
-			PanelAjout.add(submit);
+			JButton submitCate = new JButton("Ajouter");
+
+			PanelAjout.add(nomCate);
+			PanelAjout.add(descriptionCate);
+			PanelAjout.add(idCarteCate);
+			PanelAjout.add(submitCate);
 
 			
-			submit.addActionListener(e -> {
-				String requete = "INSERT INTO carte(nom,description) VALUES('"+nom.getText()+"','"+description.getText()+"')";
-				carteDAO.addTableCarte(requete);
+			submitCate.addActionListener(e -> {
+				String requete = "INSERT INTO categorie(nom,description,idCarte) VALUES('"+nomCate.getText()+"','"+descriptionCate.getText()+"','"+idCarteCate.getText()+"')";
+				categorieDAO.addTableCategorie(requete);
 				System.out.println("Ajout BON");
 
 			}
@@ -162,18 +169,24 @@ public class ModifPanel extends JFrame{
 			
 		case "item":
 			PanelAjout.removeAll();
-			JTextField nom = new JTextField();
-			JTextField description = new JTextField();
-			JButton submit = new JButton("Ajouter");
+			JTextField nomItem = new JTextField();
+			JTextField prixItem = new JTextField();
+			JTextField descriptionItem = new JTextField();
+			JTextField idCategorieItem = new JTextField();
+			JButton submitItem = new JButton("Ajouter");
 
-			PanelAjout.add(nom);
-			PanelAjout.add(description);
-			PanelAjout.add(submit);
+			PanelAjout.add(nomItem);
+			PanelAjout.add(prixItem);
+
+			PanelAjout.add(descriptionItem);
+			PanelAjout.add(idCategorieItem);
+
+			PanelAjout.add(submitItem);
 
 			
-			submit.addActionListener(e -> {
-				String requete = "INSERT INTO carte(nom,description) VALUES('"+nom.getText()+"','"+description.getText()+"')";
-				carteDAO.addTableCarte(requete);
+			submitItem.addActionListener(e -> {
+				String requete = "INSERT INTO item(nom,prix,description,idCategorie) VALUES('"+nomItem.getText()+"','"+prixItem.getText()+"','"+descriptionItem.getText()+"','"+idCategorieItem.getText()+"')";
+				itemDAO.addTableItem(requete);
 				System.out.println("Ajout BON");
 
 			}
@@ -207,14 +220,66 @@ public class ModifPanel extends JFrame{
 	private void supprimer() {
 		switch(tableChoisi) {
 		case "carte":
+			PanelDelete.removeAll();
+			JTextField idCarte = new JTextField();
+		
+			JButton submitCarte = new JButton("Supprimer");
+
+			PanelDelete.add(idCarte);
+
+			PanelDelete.add(submitCarte);
+
+			
+			submitCarte.addActionListener(e -> {
+				String requete = "DELETE FROM carte WHERE idCarte='"+idCarte.getText()+"'";
+				carteDAO.deleteTableCarte(requete);
+				System.out.println("Ajout BON");
+
+			}
+					);
 			System.out.println("1");
 			break;
 
 		case "categorie":
+			PanelDelete.removeAll();
+			JTextField idCategorie = new JTextField();
+		
+			JButton submitCate = new JButton("Supprimer");
+
+			PanelDelete.add(idCategorie);
+
+			PanelDelete.add(submitCate);
+
+			
+			submitCate.addActionListener(e -> {
+				String requete = "DELETE FROM categorie WHERE idCategorie='"+idCategorie.getText()+"'";
+				categorieDAO.deleteTableCategorie(requete);
+				System.out.println("Ajout BON");
+
+			}
+					);
 			System.out.println("2");
 			break;
 			
 		case "item":
+			PanelDelete.removeAll();
+			JTextField idItem = new JTextField();
+		
+			JButton submitItem = new JButton("Supprimer");
+
+			PanelDelete.add(idItem);
+
+			PanelDelete.add(submitItem);
+
+			
+			submitItem.addActionListener(e -> {
+				String requete = "DELETE FROM item WHERE idItem="+idItem.getText();
+				itemDAO.deleteTableItem(requete);
+				System.out.println("Ajout BON");
+
+			}
+					);
+
 			System.out.println("3");
 			break;
 

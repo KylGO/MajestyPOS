@@ -43,4 +43,14 @@ public class carteDAO {
 			
 		}
 	}
+	public static void deleteTableCarte(String requete) {
+		try {
+			Connection cn = ConnectionBDD.getConnection();
+			Statement stmt = cn.createStatement();
+			int result = stmt.executeUpdate(requete);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			
+		}		
+	}
 }

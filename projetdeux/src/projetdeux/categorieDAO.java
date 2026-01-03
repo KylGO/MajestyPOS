@@ -48,4 +48,14 @@ public class categorieDAO {
 			
 		}
 	}
+	public static void deleteTableCategorie(String requete) {
+		try {
+			Connection cn = ConnectionBDD.getConnection();
+			Statement stmt = cn.createStatement();
+			int result = stmt.executeUpdate(requete);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			
+		}		
+	}
 }

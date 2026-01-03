@@ -34,7 +34,7 @@ public class itemDAO {
 		}
 		return model;
 	}
-	public static void addTableCarte(String requete) {
+	public static void addTableItem(String requete) {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
@@ -43,5 +43,15 @@ public class itemDAO {
 			e.printStackTrace();
 			
 		}
+	}
+	public static void deleteTableItem(String requete) {
+		try {
+			Connection cn = ConnectionBDD.getConnection();
+			Statement stmt = cn.createStatement();
+			int result = stmt.executeUpdate(requete);
+		} catch(SQLException e) {
+			e.printStackTrace();
+			
+		}		
 	}
 }
