@@ -463,7 +463,32 @@ CREATE TABLE `restaurant` (
 
 INSERT INTO `restaurant` (`nom`, `adresse`, `telephone`) VALUES
 ('azeaze', '123', '123546879');
+-----------------------------------------------------------------------
 
+--
+-- Structure de la table `tableclient`
+--
+
+
+CREATE TABLE tableclient (
+	numTable  int(20) NOT NULL PRIMARY KEY,
+    etatTable int(3)
+)
+  
+--
+-- AUTO_INCREMENT pour la table `tableclient`
+--
+
+
+ALTER TABLE tableclient 
+	MODIFY numTable int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--
+-- ajouter les tables pour la table 'tableclient' 
+--
+INSERT INTO tableclient (etatTable) VALUES (0),(0),(0),(0),(0),(0),(0),(0),(0)
+
+  
 --
 -- Index pour les tables déchargées
 --
@@ -572,6 +597,14 @@ ALTER TABLE `commandeitem`
 ALTER TABLE `item`
   ADD CONSTRAINT `item_ibfk_1` FOREIGN KEY (`idCategorie`) REFERENCES `categorie` (`idCategorie`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+--
+-- Foreign Key de numTable sur 'tableclient' a 'commande'
+--
+
+ALTER TABLE commande 
+ADD CONSTRAINT commande_ibfk_1 FOREIGN KEY (numTable) REFERENCES tableclient (numTable) ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
