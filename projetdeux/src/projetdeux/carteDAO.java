@@ -5,7 +5,7 @@ import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
 public class carteDAO {
-	public static DefaultTableModel getTableCartes() {
+	public static DefaultTableModel getTableCartes(String query) {
 		System.out.println("OK");
 
 		DefaultTableModel model = new DefaultTableModel();
@@ -15,7 +15,7 @@ public class carteDAO {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM carte");
+			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
 				Object[] ligne = new Object[3];
 				ligne[0] = rs.getString("idCarte");
@@ -33,7 +33,7 @@ public class carteDAO {
 
 		return model;
 	}
-	public static void addTableCarte(String requete) {
+	public static void RequeteTableCarte(String requete) {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
@@ -43,14 +43,6 @@ public class carteDAO {
 			
 		}
 	}
-	public static void deleteTableCarte(String requete) {
-		try {
-			Connection cn = ConnectionBDD.getConnection();
-			Statement stmt = cn.createStatement();
-			int result = stmt.executeUpdate(requete);
-		} catch(SQLException e) {
-			e.printStackTrace();
-			
-		}		
-	}
 }
+
+

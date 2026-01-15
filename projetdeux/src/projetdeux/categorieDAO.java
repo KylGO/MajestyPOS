@@ -6,7 +6,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class categorieDAO {
-	public static DefaultTableModel getTableCategorie() {
+	public static DefaultTableModel getTableCategorie(String query) {
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("idCategorie");
 		model.addColumn("nom");
@@ -16,7 +16,7 @@ public class categorieDAO {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM categorie");
+			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
 				Object[] ligne = new Object[4];
 				ligne[0] = rs.getString("idCategorie");
@@ -38,7 +38,7 @@ public class categorieDAO {
 		}
 		return model;
 	}
-	public static void addTableCategorie(String requete) {
+	public static void RequeteTableCategorie(String requete) {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
@@ -48,14 +48,5 @@ public class categorieDAO {
 			
 		}
 	}
-	public static void deleteTableCategorie(String requete) {
-		try {
-			Connection cn = ConnectionBDD.getConnection();
-			Statement stmt = cn.createStatement();
-			int result = stmt.executeUpdate(requete);
-		} catch(SQLException e) {
-			e.printStackTrace();
-			
-		}		
-	}
+
 }

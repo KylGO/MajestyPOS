@@ -5,7 +5,7 @@ import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
 public class itemDAO {
-	public static DefaultTableModel getTableItem() {
+	public static DefaultTableModel getTableItem(String query) {
 		
 		DefaultTableModel model = new DefaultTableModel();
 		model.addColumn("idItem");
@@ -17,7 +17,7 @@ public class itemDAO {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM item");
+			ResultSet rs = stmt.executeQuery(query);
 			while(rs.next()) {
 				Object[] ligne = new Object[5];
 				ligne[0] = rs.getString("idItem");
@@ -34,7 +34,7 @@ public class itemDAO {
 		}
 		return model;
 	}
-	public static void addTableItem(String requete) {
+	public static void RequeteTableItem(String requete) {
 		try {
 			Connection cn = ConnectionBDD.getConnection();
 			Statement stmt = cn.createStatement();
@@ -44,14 +44,5 @@ public class itemDAO {
 			
 		}
 	}
-	public static void deleteTableItem(String requete) {
-		try {
-			Connection cn = ConnectionBDD.getConnection();
-			Statement stmt = cn.createStatement();
-			int result = stmt.executeUpdate(requete);
-		} catch(SQLException e) {
-			e.printStackTrace();
-			
-		}		
-	}
+
 }
