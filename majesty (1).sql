@@ -480,13 +480,11 @@ CREATE TABLE tableclient (
 --
 
 
-ALTER TABLE tableclient 
-	MODIFY numTable int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- ajouter les tables pour la table 'tableclient' 
 --
-INSERT INTO tableclient (etatTable) VALUES (0),(0),(0),(0),(0),(0),(0),(0),(0)
+INSERT INTO tableclient (numTable, etatTable) VALUES (1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),(8,0),(9,0),(10,0)
 
   
 --
