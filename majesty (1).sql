@@ -463,7 +463,7 @@ CREATE TABLE `restaurant` (
 
 INSERT INTO `restaurant` (`nom`, `adresse`, `telephone`) VALUES
 ('azeaze', '123', '123546879');
------------------------------------------------------------------------
+
 
 --
 -- Structure de la table `tableclient`
@@ -475,15 +475,12 @@ CREATE TABLE `tableclient` (
     etatTable int(3)
 );
   
---
--- AUTO_INCREMENT pour la table `tableclient`
---
-
 
 
 --
 -- ajouter les tables pour la table 'tableclient' 
 --
+
 INSERT INTO `tableclient` (numTable, etatTable) VALUES (1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),(8,0),(9,0),(10,0);
 
   
