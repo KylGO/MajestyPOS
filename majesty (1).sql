@@ -470,7 +470,7 @@ INSERT INTO `restaurant` (`nom`, `adresse`, `telephone`) VALUES
 --
 
 
-CREATE TABLE tableclient (
+CREATE TABLE `tableclient` (
 	numTable  int(20) NOT NULL PRIMARY KEY,
     etatTable int(3)
 )
@@ -484,7 +484,7 @@ CREATE TABLE tableclient (
 --
 -- ajouter les tables pour la table 'tableclient' 
 --
-INSERT INTO tableclient (numTable, etatTable) VALUES (1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),(8,0),(9,0),(10,0)
+INSERT INTO `tableclient` (numTable, etatTable) VALUES (1,0),(2,0),(3,0),(4,0),(5,0),(6,0),(7,0),(8,0),(9,0),(10,0)
 
   
 --
