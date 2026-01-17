@@ -1,5 +1,4 @@
 package projetdeux;
-import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,6 +12,8 @@ import java.awt.Toolkit;
 import javax.swing.*;
 
 public class ModifPanel extends JFrame{
+	private String bdd = "majesty";
+	
 	private JTable table;
 	private JPanel PanelDonne;
 	private JPanel PanelAjout;
@@ -33,9 +34,12 @@ public class ModifPanel extends JFrame{
 	private JTextField prixItem;
 	private JTextArea descriptionItem;
 	private JTextField idCategorieItem;
-	
-	public ModifPanel() {
-		setTitle("Majesty.sql");
+	private boolean tri_actif = false;
+	public ModifPanel(String bdd) {
+		
+		ConnectionBDD.setBdd(bdd);
+		
+		setTitle(bdd+".sql");
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setLayout(new BorderLayout(5,10));
 		JLabel titre = new JLabel();
@@ -113,59 +117,38 @@ public class ModifPanel extends JFrame{
 		return options;
 	}
 	
-	private JPanel TablePanelGauche() {
-		JPanel tables = new JPanel();
-		tables.setLayout(new BoxLayout(tables,BoxLayout.Y_AXIS));
-		JButton carte = new JButton();
-		carte.setBackground(new Color(105,105,105));
-		carte.setForeground(Color.WHITE);
-		carte.setText("Carte");
-		carte.setFont(new Font("Serif",Font.BOLD,85));
-		carte.setMaximumSize(new Dimension(500,120));
-		carte.addActionListener(e -> afficherCarte("SELECT * FROM carte"));
-		tables.add(Box.createVerticalStrut(160));
+	private JScrollPane TablePanelGauche() {
+	
 
-		tables.add(carte);
-		
-		
-		
-		JButton categorie = new JButton();
-		categorie.setBackground(new Color(105,105,105));
-		categorie.setForeground(Color.WHITE);
-		categorie.setText("Catégorie");
-		categorie.setFont(new Font("Serif",Font.BOLD,85));
-		categorie.setMaximumSize(new Dimension(500,120));
-		categorie.addActionListener(e -> afficherCategorie("SELECT * FROM categorie"));
-		tables.add(Box.createVerticalStrut(50));
+		JPanel tables_panel = new JPanel();
+		tables_panel.setLayout(new BoxLayout(tables_panel,BoxLayout.Y_AXIS));
+		JScrollPane tables = new JScrollPane(tables_panel);
 
-		tables.add(categorie);
-		
-		
-		JButton item = new JButton();
-		item.setBackground(new Color(105,105,105));
-		item.setForeground(Color.WHITE);
-		item.setText("Item");
-		item.setFont(new Font("Serif",Font.BOLD,85));
-		item.setMaximumSize(new Dimension(500,120));
-		item.addActionListener(e -> afficherItem("SELECT * FROM item"));
-		tables.add(Box.createVerticalStrut(50));
+		DefaultTableModel model = new DefaultTableModel();
+		model = generalDAO.getTable("SHOW tables FROM "+bdd);
+		for(int i =0;i<model.getRowCount();i++) {
+			String nom_table = model.getValueAt(i, 0).toString();
+			JButton btn_tab = new JButton();
+			btn_tab.setBackground(new Color(105,105,105));
+			btn_tab.setForeground(Color.WHITE);
+			btn_tab.setText(nom_table);
+			btn_tab.setFont(new Font("Serif",Font.BOLD,85));
+			btn_tab.setMaximumSize(new Dimension(500,120));
+			btn_tab.addActionListener(e -> afficherBDD("SELECT * FROM "+nom_table,nom_table));
+			tables_panel.add(Box.createVerticalStrut(25));
+			
 
-		tables.add(item);
+			tables_panel.add(btn_tab);	
+			
+		}
 
-		JButton test = new JButton();
-		test.setBackground(new Color(105,105,105));
-		test.setForeground(Color.WHITE);
-		test.setText("Autres");
-		test.setFont(new Font("Serif",Font.BOLD,85));
-		test.setMaximumSize(new Dimension(500,120));
-		tables.add(Box.createVerticalStrut(50));
-
-		tables.add(test);
+		tables_panel.add(Box.createHorizontalStrut(50));
 
 		return tables;
 	}
 	
 	private void ajouter() {
+
 		JPanel Ajoutpanel = new JPanel();
 		switch(tableChoisi) {
 		case "carte":
@@ -190,9 +173,10 @@ public class ModifPanel extends JFrame{
 			
 			submitCart.addActionListener(e -> {
 				String requete = "INSERT INTO carte(nom,description) VALUES('"+nomCart.getText()+"','"+descriptionCart.getText()+"')";
-				carteDAO.RequeteTableCarte(requete);
+
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherCarte("SELECT * FROM carte");
+				afficherBDD("SELECT * FROM carte","carte");
 
 			}
 					);
@@ -222,9 +206,9 @@ public class ModifPanel extends JFrame{
 			
 			submitCate.addActionListener(e -> {
 				String requete = "INSERT INTO categorie(nom,description,idCarte) VALUES('"+nomCate.getText()+"','"+descriptionCate.getText()+"','"+idCarteCate.getText()+"')";
-				categorieDAO.RequeteTableCategorie(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherCategorie("SELECT * FROM categorie");
+				afficherBDD("SELECT * FROM categorie","categorie");
 
 
 			}
@@ -258,9 +242,9 @@ public class ModifPanel extends JFrame{
 			
 			submitItem.addActionListener(e -> {
 				String requete = "INSERT INTO item(nom,prix,description,idCategorie) VALUES('"+nomItem.getText()+"','"+prixItem.getText()+"','"+descriptionItem.getText()+"','"+idCategorieItem.getText()+"')";
-				itemDAO.RequeteTableItem(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherItem("SELECT * FROM item");
+				afficherBDD("SELECT * FROM item","item");
 
 
 			}
@@ -302,7 +286,7 @@ public class ModifPanel extends JFrame{
 				String requete = "UPDATE carte SET nom='"+nomCart.getText()+"', description='"+descriptionCart.getText()+"' WHERE idCarte='"+idCarte.getText()+"'";
 				carteDAO.RequeteTableCarte(requete);
 				System.out.println("Ajout BON");
-				afficherCarte("SELECT * FROM carte");
+				afficherBDD("SELECT * FROM carte","carte");
 
 			}
 					);
@@ -336,9 +320,9 @@ public class ModifPanel extends JFrame{
 			
 			submitCate.addActionListener(e -> {
 				String requete = "UPDATE categorie SET nom='"+nomCate.getText()+"', description='"+descriptionCate.getText()+"', idCarte='"+idCarteCate.getText()+"' WHERE idCategorie='"+idCategorie.getText()+"'";
-				categorieDAO.RequeteTableCategorie(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherCategorie("SELECT * FROM categorie");
+				afficherBDD("SELECT * FROM categorie","categorie");
 
 			}
 					);
@@ -375,9 +359,9 @@ public class ModifPanel extends JFrame{
 			
 			submitItem.addActionListener(e -> {
 				String requete = "UPDATE item SET nom='"+nomItem.getText()+"', prix='"+prixItem.getText()+"',description='"+descriptionItem.getText()+"',idCategorie='"+idCategorieItem.getText()+"' WHERE idItem='"+idItem.getText()+"'";
-				itemDAO.RequeteTableItem(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherItem("SELECT * FROM item");
+				afficherBDD("SELECT * FROM item","item");
 
 			}
 					);
@@ -407,9 +391,9 @@ public class ModifPanel extends JFrame{
 			
 			submitCarte.addActionListener(e -> {
 				String requete = "DELETE FROM carte WHERE idCarte='"+idCarte.getText()+"'";
-				carteDAO.RequeteTableCarte(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherCarte("SELECT * FROM carte");
+				afficherBDD("SELECT * FROM carte","carte");
 
 			}
 					);
@@ -433,9 +417,9 @@ public class ModifPanel extends JFrame{
 			
 			submitCate.addActionListener(e -> {
 				String requete = "DELETE FROM categorie WHERE idCategorie='"+idCategorie.getText()+"'";
-				categorieDAO.RequeteTableCategorie(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherCategorie("SELECT * FROM categorie");
+				afficherBDD("SELECT * FROM categorie","categorie");
 
 			}
 					);
@@ -459,9 +443,9 @@ public class ModifPanel extends JFrame{
 			
 			submitItem.addActionListener(e -> {
 				String requete = "DELETE FROM item WHERE idItem="+idItem.getText();
-				itemDAO.RequeteTableItem(requete);
+				generalDAO.RequeteTable(requete);
 				System.out.println("Ajout BON");
-				afficherItem("SELECT * FROM item");
+				afficherBDD("SELECT * FROM item","item");
 
 			}
 					);
@@ -517,48 +501,31 @@ public class ModifPanel extends JFrame{
 		}	
 	}
 	
-	private void afficherCarte(String query) {
-		PanelAjout.removeAll();
-		PanelAjout.revalidate();
-		PanelTri.removeAll();
-		PanelTri.setLayout(new BoxLayout(PanelTri,BoxLayout.Y_AXIS));
-		
-		DefaultTableModel model = new DefaultTableModel();
-		model = carteDAO.getTableCartes(query);
-		for(int i = 0; i<model.getColumnCount();i++) {
-			final int colIndex = i;
-			String nom_col = model.getColumnName(i);
-			JButton nv_btn_tri = new JButton("Trier par "+nom_col);
-			nv_btn_tri.addActionListener(e -> {
-				afficherCarte("SELECT * FROM carte ORDER BY "+nom_col);
-			});
-			PanelTri.add(nv_btn_tri);
-		}
-	
-		PanelTri.revalidate();
-		PanelTri.repaint();
 
-		System.out.println("aaa "+carteDAO.getTableCartes(query).getColumnCount());
-		table.setModel(model);
-		int selectedRowIndex = table.getSelectedRow();
-		System.out.println(selectedRowIndex);
-		System.out.println("carte");
-		tableChoisi = "carte";
-		
-	}
-	private void afficherCategorie(String query) {
+	
+	private void afficherBDD(String query,String nom_table) {
 		PanelAjout.removeAll();
 		PanelAjout.revalidate();
 		PanelTri.removeAll();
 		PanelTri.setLayout(new BoxLayout(PanelTri,BoxLayout.Y_AXIS));
 		DefaultTableModel model = new DefaultTableModel();
-		model = categorieDAO.getTableCategorie(query);
+		model = generalDAO.getTable(query);
 		for(int i = 0; i<model.getColumnCount();i++) {
 			final int colIndex = i;
 			String nom_col = model.getColumnName(i);
 			JButton nv_btn_tri = new JButton("Trier par "+nom_col);
 			nv_btn_tri.addActionListener(e -> {
-				afficherCategorie("SELECT * FROM categorie ORDER BY "+nom_col);
+				if(tri_actif==false) {
+					afficherBDD("SELECT * FROM "+nom_table+" ORDER BY "+nom_col,nom_table);
+
+
+					tri_actif = true;
+				} else {
+					afficherBDD("SELECT * FROM "+nom_table+" ORDER BY "+nom_col+" DESC",nom_table);
+					tri_actif = false;
+					
+					
+				}
 			});
 			PanelTri.add(nv_btn_tri);
 		}
@@ -568,39 +535,12 @@ public class ModifPanel extends JFrame{
 		
 		table.setModel(model);
 
-		System.out.println("carte");
-		tableChoisi = "categorie";
+		System.out.println(nom_table);
+		tableChoisi = nom_table;		
 	}
-	
-	private void afficherItem(String query) {
-		PanelAjout.removeAll();
-		PanelAjout.revalidate();
-		PanelTri.removeAll();
-		PanelTri.setLayout(new BoxLayout(PanelTri,BoxLayout.Y_AXIS));
-		DefaultTableModel model = new DefaultTableModel();
-		model = itemDAO.getTableItem(query);
-		for(int i = 0; i<model.getColumnCount();i++) {
-			final int colIndex = i;
-			String nom_col = model.getColumnName(i);
-			JButton nv_btn_tri = new JButton("Trier par "+nom_col);
-			nv_btn_tri.addActionListener(e -> {
-				afficherItem("SELECT * FROM item ORDER BY "+nom_col);
-			});
-			PanelTri.add(nv_btn_tri);
-		}
-
-		PanelTri.revalidate();
-		PanelTri.repaint();
-		
-		table.setModel(model);
-
-		System.out.println("carte");
-		tableChoisi = "item";
-	}
-	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new ModifPanel();
+		new ModifPanel("majesty");
 	}
 
 }

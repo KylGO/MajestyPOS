@@ -2,10 +2,10 @@ package projetdeux;
 import java.sql.*;
 public class ConnectionBDD {
 	private static Connection cn;
-	
+	private static String Bdd;
 	private ConnectionBDD() {
 		try {
-			String url="jdbc:mysql://localhost:3306/majesty";
+			String url="jdbc:mysql://localhost:3306/"+Bdd;
 			String user="root";
 			String password="";
 			cn = DriverManager.getConnection(url,user,password);
@@ -22,5 +22,11 @@ public class ConnectionBDD {
 		}
 		return cn;
 	}
+
+	public static void setBdd(String bdd) {
+		Bdd = bdd;
+	}
+
+
 
 }
